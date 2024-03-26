@@ -8,4 +8,3 @@ echo "Hello Holberton" > /var/www/html/index.html
 
 # Start Apache service
 service apache2 start
-
