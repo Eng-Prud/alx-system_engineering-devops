@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# This script transfers a file from client to server using scp
+
+# Check if correct number of arguments are provided
+if [ "$#" -lt 3 ]; then
+    echo "Usage: $0 PATH_TO_FILE USERNAME PATH_TO_SSH_KEY"
+    exit 1
+fi
+
+# Assign arguments to variables
+file_path=$1
+username="root"  # Replace "your_username_here" with your actual username
+server_ip="172.17.0.23"  
+ssh_key=$3
+
+# Transfer file using scp
+scp -o StrictHostKeyChecking=no -i "$ssh_key" "$file_path" "${username}@${server_ip}:~/"
+
