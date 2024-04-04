@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Function to display information about subdomains
+print_info() {
+    local domain="$1"
+    local subdomain="$2"
+    
+    if [[ -z "$subdomain" ]]; then
+        subdomains=("www" "lb-01" "web-01" "web-02")
+    else
+        subdomains=("$subdomain")
+    fi
+    
+    for sub in "${subdomains[@]}"; do
+        dig_output=$(dig "$sub.$domain" | awk '/^'"$sub"'/ {print}')
+        record_type=$(echo "$dig_output" | awk '{print $4}')
+        destination=$(echo "$dig_output" | awk '{print $5}')
+        echo "The subdomain $sub is a $record_type record and points to $destination"
+    done
+}
+
+# Main function
+main() {
+    domain="$1"
+    subdomain="$2"
+    
+    print_info "$domain" "$subdomain"
+}
+
+# Execute main function with provided arguments
+main "$@"
+
