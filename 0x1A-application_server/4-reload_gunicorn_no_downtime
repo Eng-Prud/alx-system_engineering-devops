@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Get the process IDs of Gunicorn workers
+worker_pids=$(pgrep gunicorn)
+
+# Send a signal to gracefully reload Gunicorn workers
+for pid in $worker_pids; do
+    kill -HUP $pid
+done
+
+# Optional: Add a delay to ensure workers have time to gracefully shutdown
+sleep 5
+
+# Check if Gunicorn workers have been restarted
+new_worker_pids=$(pgrep gunicorn)
+
+if [ -z "$new_worker_pids" ]; then
+    echo "Gunicorn workers successfully restarted"
+else
+    echo "Error: Gunicorn workers were not restarted"
+fi
+
